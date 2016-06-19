@@ -1,0 +1,29 @@
+{
+  "name": "Web Server Status Monitor",
+  "type": "project",
+  "version": "0.0.1",
+  "description": "The goal of this exercise is to write a program that can be used to monitor statistics detailing how web servers are currently performing and store those statistics in a database.",
+  "keywords": ["UberSmith"],
+  "homepage": "https://github.com/DeeZone/WebServerMonitor",
+  "license" : "MIT",
+  "authors": [
+    {
+      "name": "Darren Lee",
+      "homepage": "https://github.com/DeeZone"
+    }
+  ],
+  "require": {
+    "php": ">= 7.0.0",
+    "simplon/mysql": "1.*",
+    "guzzlehttp/guzzle": "6.*",
+    "dosomething/stathat": "1.*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "4.0.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "UberSmith\\ServerStatus\\": "src/"
+    }
+  }
+}
