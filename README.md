@@ -1,11 +1,5 @@
 # WebServerMonitor
-A program that can be used to monitor statistics detailing how web servers are currently performing and store those statistics in a database.
 
-
-# Project Specifications
-
-Web Server Status Monitor
-=========================
 The goal of this exercise is to write a program that can be used to monitor statistics detailing how web servers are currently performing and store those statistics in a database.
 
 Your program should run from the command-line and:
