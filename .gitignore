@@ -1,0 +1,11 @@
+# Hidden system files
+.DS_Store
+.idea
+
+# Node files
+npm-debug.log
+/bower_components
+/node_modules
+
+# Composer package module files
+/vendor
