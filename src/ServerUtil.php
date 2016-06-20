@@ -29,7 +29,12 @@ class ServerUtil
     public function __construct()
     {
         $config = $this->gatherDBConfig();
-        $this->dbConn = new Mysql($config);
+        $this->dbConn = new Mysql(
+            $config['host'],
+            $config['user'],
+            $config['password'],
+            $config['database']
+        );
     }
 
     /**
@@ -39,10 +44,10 @@ class ServerUtil
     private function gatherDBConfig()
     {
         $config = [
-            'host'       => 'localhost',
-            'user'       => 'rootuser',
-            'password'   => 'rootuser',
-            'database'   => 'our_database',
+            'host'       => 'localhost:8889',
+            'user'       => 'root',
+            'password'   => 'root',
+            'database'   => 'ubersmith',
 
             // optional
 
@@ -64,11 +69,15 @@ class ServerUtil
     public function gatherServers()
     {
         $servers = [];
-        $results = $this->dbConn->fetchColumnMany('SELECT * FROM server');
+        $results = $this->dbConn->fetchRowMany('SELECT * FROM server');
 
         foreach ($results as $result) {
             $servers[] = [
-                '' => '',
+                'server_id' => $result['server_id'],
+                'name' => $result['name'],
+                'httpd' => $result['httpd'],
+                'address' => $result['address'],
+                'port' => $result['port']
             ];
         }
 
