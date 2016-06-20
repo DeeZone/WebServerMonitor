@@ -13,9 +13,9 @@
     }
   ],
   "require": {
-    "php": ">= 7.0.0",
+    "php": ">= 5.5",
     "simplon/mysql": "1.*",
-    "guzzlehttp/guzzle": "6.*",
+    "guzzlehttp/guzzle": "5.*",
     "dosomething/stathat": "1.*"
   },
   "require-dev": {
