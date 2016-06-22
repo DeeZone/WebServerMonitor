@@ -6,43 +6,54 @@
  * References:
  * - How can one use multi threading in PHP applications
  * http://stackoverflow.com/questions/70855/how-can-one-use-multi-threading-in-php-applications
+ * - Thread carefully
+ * https://blog.madewithlove.be/post/thread-carefully/
  */
 
 namespace UberSmith\ServerStatus;
 
+use GuzzleHttp\Client as Client;
 use DoSomething\StatHat\Client as StatHat;
 use Exception;
 
 /**
- * Class AsyncStatusRequest
+ * Class StatusRequestTread
  *
- * @package UberSmith\AsyncStatusRequest
+ * @package UberSmith\ServerStatus
  */
-class AsyncStatusRequest extends Thread {
+// class StatusRequestTread extends Thread {
+class StatusRequestTread {
     
     /**
      * The website to request the server status details from.
      * @var string $url
      */
-    private $url;
+    private $server;
     
     /*
      * The response of the server status request
      * @var string $data
      */
-    private $data;
-    
-    public function __construct($url) {
-        $this->url = $url;
+    public $data;
+
+    /**
+     * StatusRequestTread constructor.
+     *
+     * @param array $server
+     *   Settings for target server to gather status details for.
+     */
+    public function __construct($server) {
+        $this->server = $server;
+        $this->client = new Client();
     }
-    
+
+    /**
+     *
+     */
     public function run() {
-        if (($url = $this->url)) {
-            /*
-             * If a large amount of data is being requested, you might want to
-             * fsockopen and read using usleep in between reads
-             */
-            $this->data = file_get_contents($url);
+        if (($server = $this->server)) {
+
+            $this->data =
         } else
             printf("Thread #%lu was not provided a URL\n", $this->getThreadId());  // Thread::getCurrentThreadId()
     }

@@ -1,7 +1,7 @@
 <?php
 /**
  * Class ServerUtil
- * 
+ *
  */
 
 namespace UberSmith\ServerStatus;
@@ -22,7 +22,7 @@ class ServerUtil
      * @var object $dbConn
      */
     private $dbConn;
-
+    
     /**
      * ServerUtil constructor.
      */
@@ -36,7 +36,7 @@ class ServerUtil
             $config['database']
         );
     }
-
+    
     /**
      *
      * @return array
@@ -48,18 +48,18 @@ class ServerUtil
             'user'       => 'root',
             'password'   => 'root',
             'database'   => 'ubersmith',
-
+    
             // optional
-
+    
             'fetchMode'  => \PDO::FETCH_ASSOC,
             'charset'    => 'utf8',
             'port'       => 3306,
             'unixSocket' => null,
         ];
-
+    
         return $config;
     }
-
+    
     /**
      * gatherServers(): Gather details of all the target servers. Will be used to make requests to gather server
      * status responses.
@@ -70,18 +70,26 @@ class ServerUtil
     {
         $servers = [];
         $results = $this->dbConn->fetchRowMany('SELECT * FROM server');
-
-        foreach ($results as $result) {
-            $servers[] = [
-                'server_id' => $result['server_id'],
-                'name' => $result['name'],
-                'httpd' => $result['httpd'],
-                'address' => $result['address'],
-                'port' => $result['port']
-            ];
+    
+        if ($results) {
+    
+            foreach ($results as $result) {
+                $servers[] = [
+                    'server_id' => $result['server_id'],
+                    'name' => $result['name'],
+                    'httpd' => $result['httpd'],
+                    'address' => $result['address'],
+                    'port' => $result['port']
+                ];
+            }
+    
+            return $servers;
+    
         }
-
-        return $servers;
+        else {
+            throw new Exception('ServerUtil->gatherServers() failed to gather servers.');
+        }
+    
     }
     
 }
