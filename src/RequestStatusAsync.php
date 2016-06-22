@@ -18,12 +18,11 @@ use DoSomething\StatHat\Client as StatHat;
 use Exception;
 
 /**
- * Class StatusRequestTread
+ * Class RequestStatusAsync
  *
  * @package UberSmith\ServerStatus
  */
-// class StatusRequestTread extends Thread {
-class StatusRequestThread {
+class RequestStatusAsync {
 
     /**
      * The website to request the server status details from.

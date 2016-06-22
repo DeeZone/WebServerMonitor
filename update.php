@@ -23,20 +23,28 @@ require_once __DIR__ . '/config/config.' . $mode . '.inc';
 // Load up the Composer autoload magic
 require_once __DIR__ . '/vendor/autoload.php';
 use UberSmith\ServerStatus\ServerUtil;
-use UberSmith\ServerStatus\StatusRequestTread;
+use UberSmith\ServerStatus\StatusRequestThread;
 
-$threades = [];
+try
+{
+    // Load target sites from database
+    $serverUtil = new ServerUtil();
+    $targetServers = $serverUtil->gatherServers();
 
-$serverUtil = new ServerUtil();
-$targetServers = $serverUtil->gatherServers();
 
-// Start thread for each target server
-foreach ($targetServers as $server) {
-    $threades[$server['server_id']] = new StatusRequestTread($server);
-    $threades[$server['server_id']]->start();
+    try
+    {
+        $requestStatus = new RequestStatusAsync($targetServers);
+        $results = $requestStatus->sendRequests();
+    }
+    catch(Exception $e)
+    {
+        echo '- Status Check Exception: ' . $e->getMessage();
+    }
+    
+    // Write results to database
+
 }
-
-// main thread to wait for the child threads to return
-foreach ($threades as $threadID => $thread) {
-    $threades[$threadID]->join();
+catch(Exception $e) {
+    echo '- Pre or Post flight Exception: ' . $e->getMessage();
 }
