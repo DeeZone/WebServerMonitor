@@ -23,7 +23,7 @@ require_once __DIR__ . '/config/config.' . $mode . '.inc';
 // Load up the Composer autoload magic
 require_once __DIR__ . '/vendor/autoload.php';
 use UberSmith\ServerStatus\ServerUtil;
-use UberSmith\ServerStatus\StatusRequestThread;
+use UberSmith\ServerStatus\RequestStatusAsync;
 
 try
 {
