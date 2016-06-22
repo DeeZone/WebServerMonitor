@@ -1,9 +1,9 @@
 <?php
 /**
- * AsyncStatusRequest class used to mange server status requests using ptthreads
- * http://php.net/manual/en/book.pthreads.php
+ * Manage server status requests using Guzzle3 parallel requests
+ * http://guzzle3.readthedocs.io/http-client/client.html#sending-requests-in-parallel
  *
- * References:
+ * Other thread references:
  * - How can one use multi threading in PHP applications
  * http://stackoverflow.com/questions/70855/how-can-one-use-multi-threading-in-php-applications
  * - Thread carefully
@@ -12,7 +12,8 @@
 
 namespace UberSmith\ServerStatus;
 
-use GuzzleHttp\Client as Client;
+use Guzzle\Batch\Batch;
+use Guzzle\Http\BatchRequestTransfer;
 use DoSomething\StatHat\Client as StatHat;
 use Exception;
 
@@ -22,14 +23,14 @@ use Exception;
  * @package UberSmith\ServerStatus
  */
 // class StatusRequestTread extends Thread {
-class StatusRequestTread {
-    
+class StatusRequestThread {
+
     /**
      * The website to request the server status details from.
      * @var string $url
      */
-    private $server;
-    
+    private $servers;
+
     /*
      * The response of the server status request
      * @var string $data
@@ -42,19 +43,33 @@ class StatusRequestTread {
      * @param array $server
      *   Settings for target server to gather status details for.
      */
-    public function __construct($server) {
-        $this->server = $server;
-        $this->client = new Client();
+    public function __construct($servers)
+    {
+        $this->servers = $servers;
+
+        $transferStrategy = new BatchRequestTransfer(getenv("MAX_LOAD"));
+        $divisorStrategy = $transferStrategy;
+        $this->batch = new Batch($transferStrategy, $divisorStrategy);
     }
 
     /**
      *
      */
-    public function run() {
-        if (($server = $this->server)) {
+    public function sendRequests()
+    {
 
-            $this->data =
-        } else
-            printf("Thread #%lu was not provided a URL\n", $this->getThreadId());  // Thread::getCurrentThreadId()
+        foreach($this->servers as $server)
+        {
+            $address = $server['address'];
+            if (!empty($server['port'])) {
+                $address .= ':' . $server['port'];
+            }
+            $this->batch->add($address);
+        }
+        // Flush the queue and retrieve the flushed items
+        $results = $batch->flush();
+
+        return $results;
     }
+
 }
