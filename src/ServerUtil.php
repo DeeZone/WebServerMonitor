@@ -1,7 +1,6 @@
 <?php
 /**
- * Class ServerUtil
- *
+ * Persistent storage utility class to manage interaction with database.
  */
 
 namespace UberSmith\ServerStatus;
@@ -38,30 +37,30 @@ class ServerUtil
     }
     
     /**
+     * Define connection details for database.
      *
      * @return array
      */
     private function gatherDBConfig()
     {
         $config = [
-            'host'       => 'localhost:8889',
-            'user'       => 'root',
-            'password'   => 'root',
-            'database'   => 'ubersmith',
+            'host'       => getenv('DB_CONFIG_HOST'),
+            'user'       => getenv('DB_CONFIG_USER'),
+            'password'   => getenv('DB_CONFIG_PASSWORD'),
+            'database'   => getenv('DB_CONFIG_DATABASE'),
     
             // optional
-    
-            'fetchMode'  => \PDO::FETCH_ASSOC,
-            'charset'    => 'utf8',
-            'port'       => 3306,
-            'unixSocket' => null,
+            'fetchMode'  => getenv('DB_CONFIG_FETCHMODE'),
+            'charset'    => getenv('DB_CONFIG_CHARSET'),
+            'port'       => getenv('DB_CONFIG_PORT'),
+            'unixSocket' => getenv('DB_CONFIG_UNIXSOCKET'),
         ];
     
         return $config;
     }
     
     /**
-     * gatherServers(): Gather details of all the target servers. Will be used to make requests to gather server
+     * Gather details of all the target servers. Will be used to make requests to gather server
      * status responses.
      *
      * @return array
