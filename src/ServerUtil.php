@@ -73,7 +73,7 @@ class ServerUtil
         if ($results) {
     
             foreach ($results as $result) {
-                $servers[] = [
+                $servers[$result['address']] = [
                     'server_id' => $result['server_id'],
                     'name' => $result['name'],
                     'httpd' => $result['httpd'],
