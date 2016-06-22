@@ -2,6 +2,10 @@
 .DS_Store
 .idea
 
+# Configuration
+/config/config.local.inc
+/config/config.production.inc
+
 # Node files
 npm-debug.log
 /bower_components
