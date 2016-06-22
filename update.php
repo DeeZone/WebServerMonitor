@@ -11,16 +11,19 @@
  *  - http://masnun.com/2013/12/15/multithreading-in-php-doing-it-right.html
  */
 
-if ($bla) {
-    $bla = true;
-}
-
 date_default_timezone_set('America/New_York');
+
+// Define application enviroment
+require_once __DIR__ . '/config/config.mode.inc';
+
+// Based on application mode, load approprate configuration settings
+$mode = getenv("APP_MODE");
+require_once __DIR__ . '/config/config.' . $mode . '.inc';
 
 // Load up the Composer autoload magic
 require_once __DIR__ . '/vendor/autoload.php';
 use UberSmith\ServerStatus\ServerUtil;
-use UberSmith\ServerStatus\StatusRequestTread
+use UberSmith\ServerStatus\StatusRequestTread;
 
 $threades = [];
 
@@ -37,5 +40,3 @@ foreach ($targetServers as $server) {
 foreach ($threades as $threadID => $thread) {
     $threades[$threadID]->join();
 }
-
-echo 
