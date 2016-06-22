@@ -1,6 +1,7 @@
 <?php
 /**
- * Development mode configuration. Toggle values ("local" vs "production") based on the server enviroment
- * of the application.
+ * Development mode configuration. Toggle values ("local" vs "production") based on the
+ * server environment of the application.
  */
- putenv("APP_ENVIROMENT=local");
+
+putenv("APP_MODE=local");
