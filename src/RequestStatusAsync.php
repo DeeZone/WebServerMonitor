@@ -12,9 +12,9 @@
 
 namespace UberSmith\ServerStatus;
 
-use Guzzle\Batch\Batch;
-use Guzzle\Http\BatchRequestTransfer;
-use DoSomething\StatHat\Client as StatHat;
+use GuzzleHttp\Client;
+use GuzzleHttp\Promise;
+use GuzzleHttp\Stream\Stream;
 use Exception;
 
 /**
@@ -31,6 +31,12 @@ class RequestStatusAsync {
     private $servers;
 
     /*
+     *
+     * @var object $client
+     */
+    public $client;
+
+    /*
      * The response of the server status request
      * @var string $data
      */
@@ -45,14 +51,11 @@ class RequestStatusAsync {
     public function __construct($servers)
     {
         $this->servers = $servers;
-
-        $transferStrategy = new BatchRequestTransfer(getenv("MAX_LOAD"));
-        $divisorStrategy = $transferStrategy;
-        $this->batch = new Batch($transferStrategy, $divisorStrategy);
+        $this->client = new Client();
     }
 
     /**
-     *
+     * Request server status data asynchronously
      */
     public function sendRequests()
     {
@@ -63,12 +66,23 @@ class RequestStatusAsync {
             if (!empty($server['port'])) {
                 $address .= ':' . $server['port'];
             }
-            $this->batch->add($address);
+            $promises[$server['address']] = $this->client->getAsync($address);
         }
-        // Flush the queue and retrieve the flushed items
-        $results = $batch->flush();
+        $results = Promise\settle($promises)->wait();
+        $results = Promise\unwrap($promises);
 
-        return $results;
+        // @todo Move to separate method
+        // Extract body contents from responses
+        $statusBodies = [];
+        foreach($results as $address => $result)
+        {
+          $body = $result->getBody();
+          $statusBodies[$address] = $body->getContents();
+        }
+
+        // Parse responses for values based on httpd class
+
+        return $statuses;
     }
 
 }
